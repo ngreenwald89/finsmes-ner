@@ -25,15 +25,15 @@ from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 
 # also 3 and 4 classes available. check /usr/local/share/stanford-ner-2018-02-27
-model_7_classes = '/usr/local/share/stanford-ner-2018-02-27/classifiers/english.muc.7class.distsim.crf.ser.gz'
-ner_jar = '/usr/local/share/stanford-ner-2018-02-27/stanford-ner.jar'
+MODEL_7_CLASSES_PATH = '/usr/local/share/stanford-ner-2018-02-27/classifiers/english.muc.7class.distsim.crf.ser.gz'
+NER_JAR_PATH = '/usr/local/share/stanford-ner-2018-02-27/stanford-ner.jar'
 
 RE_SERIES = re.compile(r'series [A-Z]{1}', re.I)
 
 # create NER object
 st = StanfordNERTagger(
-    model_7_classes,
-    ner_jar,
+    MODEL_7_CLASSES_PATH,
+    NER_JAR_PATH,
     encoding='utf-8'
 )
 
@@ -101,23 +101,26 @@ if __name__ == '__main__':
     logging.basicConfig(filename=log_file, level=logging.DEBUG,
                         format="%s(asctime)s %(levelname)s %(name)s L%(lineno)d %(funcName)s: %(message)s", datefmt='%m/%d/%Y %I:%M:%S %p')
 
+    FINSMES_FILE_PATH_PATTERN = 'finsmes/files/page-{}.csv'
+    output_filename = 'small_test.csv'
     summaries = []
-    with codecs.open('finsmes/files/page-{}.csv'.format(0), 'r', encoding='utf-8') as f:
+    with codecs.open(FINSMES_FILE_PATH_PATTERN.format(0), 'r', encoding='utf-8') as f:
         reader = csv.reader(f, delimiter=',')
         for row in reader:
             summaries.append(row)
     # skip page-1, doesn't exist
     for i in range(2, 1816):
 
-        with codecs.open('finsmes/files/page-{}.csv'.format(i), 'r', encoding='utf-8') as f:
+        with codecs.open(FINSMES_FILE_PATH_PATTERN.format(i), 'r', encoding='utf-8') as f:
             reader = csv.reader(f, delimiter=',')
             for row in reader:
                 summaries.append(row)
 
+    # get rid of header records
     summaries = filter(lambda x: x != ['url', 'summary'], summaries)
     logging.info('--------------------- done reading data, number of summaries: {}'.format(len(summaries)))
     summaries = summaries[:10]  # short for example
     t1 = time()
-    classify_wrapper(summaries, 'sep_test.csv')
+    classify_wrapper(summaries, output_filename)
     t2 = time()
     logging.info('classifying {} summaries took: {} seconds'.format(len(summaries), round(t2 - t1, 2)))
