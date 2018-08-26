@@ -1,0 +1,18 @@
+* having trouble writing all characters from scrapy - for some reason codecs utf-8 failing to write
+* finsmes schema goes back to 07/2015 - so only got data from 07/15 forward
+* scraping finsmes pages takes ~5 minutes
+* just getting the summaries, not the articles
+
+
+* Stanford NER - Named Entity Recognition
+
+* quality
+* maybe better results with full article, but also potential for more confusion
+* existing model kind of meh, depending on what you need
+* could possibly train it to do better with your dataset, but need to label examples to train it on
+* if doing training, what type of computer resources do you need..don't know much about underlying model
+* maybe already some good models out there? Named Entity Recognition for finance / business / tech?
+
+* performance
+* with two CPUs, 100 summaries took 155 seconds
+
