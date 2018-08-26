@@ -1,0 +1,13 @@
+env/
+
+# PyCharm
+.DS_Store
+.idea/
+*.pyc
+
+*.log
+*.out
+
+
+files/
+
