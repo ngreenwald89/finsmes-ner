@@ -18,7 +18,8 @@ https://github.com/ngreenwald89/finsmes-ner/blob/master/finsmes_ner.py
 `$ scrapy crawl finsmes`
 
 Should take about 5 minutes to run. 
-See https://doc.scrapy.org/en/latest/intro/tutorial.html and example scraped page: http://www.finsmes.com/category/usa/page/2
+See https://doc.scrapy.org/en/latest/intro/tutorial.html and example scraped page: http://www.finsmes.com/category/usa/page/2.
+
 Right now just getting article summaries, rather than entire articles. Right now hardcoded to get 1816 pages, likely to be more over time.
 
 # Generating Named Entity files
