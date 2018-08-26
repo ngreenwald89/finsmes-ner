@@ -38,19 +38,12 @@ st = StanfordNERTagger(
 )
 
 
-# TODO: parallelize Classifier
-def classify_summaries(summaries):
-    t1 = time()
-    list_of_dicts = [classify_worker(summary) for summary in summaries]
-    t2 = time()
-    logging.info('---------------------')
-    logging.info('classifying {} summaries took: {} seconds'.format(len(summaries), round(t2 - t1, 2)))
-    logging.info('---------------------')
-
-    return list_of_dicts
-
-
 def classify_worker(summary):
+    """
+    extract Named Entities from a string of text
+    :param summary: string of text
+    :return: dictionary of Named Entity key value pairs. Ex: {'ORGANIZATION': 'Amazon', 'LOCATION': 'Seattle'}
+    """
     url, text = summary
     text = text.strip()
     # Good news! multiprocessing can use st object defined outside worker
@@ -62,18 +55,14 @@ def classify_worker(summary):
     output = defaultdict(list)
     current_tag = classified_text[0][1]
     for word, tag in classified_text:
-        if tag in ('ORGANIZATION') and tag in output and tag != current_tag:
+        if tag in ('ORGANIZATION',) and tag in output and tag != current_tag:
             # new tag - separate and change tags
             output[tag].append('|')  # append separator
             current_tag = tag  # reset current_tag
         output[tag].append(word)
 
-    # old way without separator
-    # for word, tag in classified_text:
-    #     output[tag].append(word)
-
+    # convert list of tags to string of tags
     output2 = dict()
-
     for k, v in output.items():
         if k in ('ORGANIZATION', 'LOCATION', 'O', 'PERSON'):
             output2[k] = ' '.join(v)
